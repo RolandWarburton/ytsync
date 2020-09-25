@@ -1,21 +1,24 @@
-const debug = require("debug")("YTSync");
+const debug = require("debug");
 const fs = require("fs");
 require("dotenv").config();
+
+const log = debug("YTSync:log");
+const err = debug("YTSync");
 
 const fExist = (fp) => {
 	if (fs.existsSync(fp)) return true;
 };
 
 function getFile(fp, timeout) {
-	debug("getting file");
+	log("getting file");
 	return new Promise((resolve, reject) => {
 		function checkLock() {
 			if (!fExist(fp)) {
-				debug("File lock is released");
+				log("File lock is released");
 				resolve();
 			} else {
 				setTimeout(checkLock, timeout);
-				debug("It's been 1s. Execute the function again.");
+				log("It's been 1s. Execute the function again.");
 			}
 		}
 		checkLock();
@@ -25,24 +28,27 @@ function getFile(fp, timeout) {
 const snatchFile = "/home/sftp/lacie/youtube/snatch.list";
 
 module.exports = async (req, res) => {
-	debug("new like hook");
-	debug(req.body);
+	log("new like hook");
+	log(req.body);
 
 	// do a simple password check
-	if (req.body.key != process.env.KEY)
+	log(`checking password ${req.body.key} == ${process.env.KEY}`);
+	if (req.body.key != process.env.KEY) {
+		log("password is incorrect");
 		return res.status(400).json({ success: false });
+	}
 
 	// wait for no lock
-	debug("checking for lock");
+	log("checking for lock");
 	await getFile("/tmp/ytdlrc.lock", 1000);
 
 	// append to snatch file
 	try {
-		debug(`attempting to append ${req.body.url}`);
+		log(`attempting to append ${req.body.url}`);
 		fs.appendFileSync(snatchFile, req.body.url);
-		debug("successfully wrote new video");
+		log("successfully wrote new video");
 	} catch (err) {
-		debug("error writing to snatch file");
+		log("error writing to snatch file");
 		// Uncomment if not running in systemd
 		// fs.appendFileSync(__dirname + "/log.txt", err);
 
