@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
 	// append to snatch file
 	try {
 		log(`attempting to append ${req.body.url}`);
-		fs.appendFileSync(snatchFile, req.body.url);
+		fs.appendFileSync(snatchFile, req.body.url + "\n");
 		log("successfully wrote new video");
 	} catch (err) {
 		log("error writing to snatch file");
