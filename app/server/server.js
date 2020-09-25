@@ -1,10 +1,13 @@
 const express = require("express");
-const debug = require("debug")("YTSync");
+const debug = require("debug");
 const hooks = require("./routes/hooks");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-const port = process.env.PORT || 3001;
+const log = debug("YTSync:log");
+const err = debug("YTSync");
+
+const port = 2212;
 const app = express();
 
 const urlencodedParser = bodyParser.urlencoded({
@@ -22,7 +25,8 @@ app.use("/hook", hooks);
 
 // run
 app.listen(port, () => {
-	debug(`server running on port ${port}`);
+	log(`server running on port ${port}`);
+	// console.log(`server running on port ${port}`);
 });
 
 // fallback

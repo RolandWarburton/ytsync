@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
 
 	// do a simple password check
 	if (req.body.key != process.env.KEY)
-		return res.status(500).json({ success: false });
+		return res.status(400).json({ success: false });
 
 	// wait for no lock
 	debug("checking for lock");
@@ -43,7 +43,11 @@ module.exports = async (req, res) => {
 		debug("successfully wrote new video");
 	} catch (err) {
 		debug("error writing to snatch file");
-		fs.appendFileSync(__dirname + "/log.txt", err);
+		// Uncomment if not running in systemd
+		// fs.appendFileSync(__dirname + "/log.txt", err);
+
+		// return an all bad
+		return res.status(500).json({ success: false });
 	}
 
 	// return all good
