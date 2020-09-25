@@ -1,0 +1,52 @@
+{
+	"info": {
+		"_postman_id": "53f76aac-14ab-49c8-a270-0ca15cb9e32c",
+		"name": "YTSync",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ytsync.0x4.host:3000/hook/like",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "key",
+						"value": "AIzaSyD3oJpSLiZXS3hKKeuxtyTYLNzuYcTloKo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "url",
+							"value": "https://youtu.be/Sm1bY8Ym8BE",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "P@ssw0rd",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "ytsync.0x4.host:3000/hook/like",
+					"host": [
+						"ytsync",
+						"0x4",
+						"host"
+					],
+					"port": "3000",
+					"path": [
+						"hook",
+						"like"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
