@@ -1,0 +1,13 @@
+[Unit]
+Description=ytsync
+Documentation=https://github.com/RolandWarburton/ytsync
+After=network.target
+
+[Service]
+Type=simple
+User=roland
+ExecStart=/home/roland/.nvm/versions/node/v12.18.4/bin/node /home/roland/ytsync/app/server/server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
