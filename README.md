@@ -18,3 +18,26 @@ Set up a URL and you are good to go.
 ### Set up nginx proxy
 
 Modify and copy nginx/nginx.conf for your needs, it will reverse proxy traffic to your express app.
+
+## Video Downloader
+
+Uses a python script and youtube-dl to replace ytdlrc because i am not using rsync.
+
+### Installation instructions
+
+```none
+source bin/activate
+```
+
+install required packages. youtube_dl is tested to work with version *2020.9.20*.
+
+```none
+pip install -r requirements.txt
+```
+
+Then edit `ytdldb.py` and set the required file locations and run the script.
+
+### TODO
+
+- [x] Support playlists
+- [ ] Support tags
