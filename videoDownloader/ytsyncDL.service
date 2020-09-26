@@ -8,3 +8,5 @@ Type=oneshot
 User=roland
 ExecStart=/home/roland/ytdldb/bin/python /home/roland/ytsync/videoDownloader/ytdldb.py
 
+[Install]
+WantedBy=multi-user.target
