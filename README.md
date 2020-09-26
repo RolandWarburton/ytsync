@@ -39,5 +39,7 @@ Then edit `ytdldb.py` and set the required file locations and run the script.
 
 ### TODO
 
-- [x] Support playlists
-- [ ] Support tags
+- [x] Support playlists and videos
+- [x] Support likes playlist
+- [ ] Support history playlist
+- [ ] Support tags (tag occurrence ranking)
