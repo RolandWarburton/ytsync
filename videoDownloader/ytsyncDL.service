@@ -1,0 +1,10 @@
+[Unit]
+Description=ytsync video downloader
+Documentation=https://github.com/RolandWarburton/ytsync
+Wants=ytsyncDL.timer
+
+[Service]
+Type=oneshot
+User=roland
+ExecStart=/home/roland/ytdldb/bin/python /home/roland/ytsync/videoDownloader/ytdldb.py
+

@@ -1,0 +1,11 @@
+[Unit]
+Description=timer for youtube downloader service
+
+[Timer]
+#Run once a day at midnight
+OnCalendar=daily
+#This is the service that we are targeting
+Unit=ytsyncDL.service
+
+[Install]
+WantedBy=timers.target

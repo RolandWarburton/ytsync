@@ -27,14 +27,14 @@ ytdl_output_template="%(uploader)s.%(upload_date)s.%(title)s.%(resolution)s.%(id
 def getDBLock():
 	# print("creating lock")
 	# write an empty file to indicate a locked database
-	f = open("ytdldb.lock", "w")
+	f = open("/tmp/ytdldb.lock", "w")
 	f.close()
 	
 
 def checkDBLock():
 	"""[summary] Return true if DB is locked"""
 	# print("checking for lock")
-	if os.path.exists("ytdldb.lock"):
+	if os.path.exists("/tmp/ytdldb.lock"):
 		print("lock exists")
 		return True
 	# else:
@@ -43,7 +43,7 @@ def checkDBLock():
 
 def releaseDBLock():
 	# print("removing lock")
-	os.remove("ytdldb.lock")
+	os.remove("/tmp/ytdldb.lock")
 
 
 
@@ -72,9 +72,8 @@ def download_video(url, subdir, title):
 
 	writeURL = "{ytdl_root_dir}/videos/{subdir}/%(title)s.%(ext)s".format(ytdl_root_dir = ytdl_root_dir, subdir = subdir)
 	opt = {
-		# 'outtmpl': "./"
 		'outtmpl': writeURL,
-		# "format": "best[filesize<500M]",
+		"format": "best[filesize<500M]",
 		"print-json": False,
 		"quiet": True,
 		"continue": True,
@@ -116,9 +115,9 @@ def main():
 	print("Queued {0}".format(len(downloadQueue)))
 
 	# for testing you can take a slice of the array like this
-	test = downloadQueue[:2]
+	# test = downloadQueue[:3]
 
-	for i in range(len(test)):
+	for i in range(len(downloadQueue)):
 		videoURL = downloadQueue[i]
 		meta = getVideoValue(videoURL)
 		if meta == None: continue
