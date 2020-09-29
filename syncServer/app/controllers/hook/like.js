@@ -25,7 +25,7 @@ function getFile(fp, timeout) {
 	});
 }
 
-const snatchFile = "/home/sftp/lacie/youtube/snatch.list";
+const snatchFile = "/home/sftp/lacie/test/snatch.list";
 
 module.exports = async (req, res) => {
 	log("new like hook");

@@ -7,7 +7,7 @@ After=network.target
 Type=simple
 User=roland
 Environment=PORT=2212 ROOT=/home/roland/ytsync KEY=P@ssw0rd DEBUG=YTSync*
-ExecStart=/home/roland/.nvm/versions/node/v12.18.4/bin/node /home/roland/ytsync/app/server/server.js
+ExecStart=/home/roland/.nvm/versions/node/v12.18.4/bin/node /home/roland/ytsync/syncServer/app/server/server.js
 Restart=on-failure
 
 [Install]

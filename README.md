@@ -41,5 +41,6 @@ Then edit `ytdldb.py` and set the required file locations and run the script.
 
 - [x] Support playlists and videos
 - [x] Support likes playlist
+- [ ] Add paths to ENV so it works better with systemd (investigate how to access env in python too)
 - [ ] Support history playlist
 - [ ] Support tags (tag occurrence ranking)

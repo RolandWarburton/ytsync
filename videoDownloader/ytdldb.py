@@ -4,6 +4,7 @@ import os
 import youtube_dl
 from urllib.parse import urlparse
 import json
+import time
 
 # base directory
 ytdl_root_dir="/home/sftp/lacie/test"
@@ -34,7 +35,23 @@ def getDBLock():
 def checkDBLock():
 	"""[summary] Return true if DB is locked"""
 	# print("checking for lock")
-	if os.path.exists("/tmp/ytdldb.lock"):
+	lockFileLocation = "/tmp/ytdldb.lock"
+	pathExist = os.path.exists(lockFileLocation)
+	if not pathExist: return False
+
+
+	# determine if the lock is old enough to be removed or not (in case program crashed and lock wasn't cleaned up)
+	createTimeThreshold = 300
+	modTime = os.path.getmtime(lockFileLocation)
+	currTime = time.time()
+	# timeout = currTime - createTimeThreshold
+	# if the file mod + some extra time is still less than the current time then the lock is recently created and considered in grace period (not stale)
+	# EG time is 1000 and the file was created at 500 (threshold 5mins = 300)
+	# 500 + 300 < 1000 is TRUE so its FRESH
+	# now say the time is 8000
+	# 500 + 300 < 8000 is FALSE so its STALE
+	staleLock = modTime + createTimeThreshold < currTime
+	if not staleLock:
 		print("lock exists")
 		return True
 	# else:
@@ -78,15 +95,20 @@ def download_video(url, subdir, title):
 		"quiet": True,
 		"continue": True,
 		"writeinfojson": True,
+		"writethumbnail": True,
 		"keep": True
 	}
 
-	with youtube_dl.YoutubeDL(opt) as ydl:
-		ydl.download([url])
-		ydl.extract_info(url, download=False)
-		# print(a)
-		print("wrote to", writeURL)
-		# print("downloaded", urlparse(url).query)
+	try:
+		with youtube_dl.YoutubeDL(opt) as ydl:
+			ydl.download([url])
+			ydl.extract_info(url, download=False)
+			# print(a)
+			print("wrote to", writeURL)
+			# print("downloaded", urlparse(url).query)
+			return True
+	except:
+		return False
 
 def appendArchive(videoURL):
 	f=open(archiveFile, "a+")
@@ -120,7 +142,13 @@ def main():
 	for i in range(len(downloadQueue)):
 		videoURL = downloadQueue[i]
 		meta = getVideoValue(videoURL)
-		if meta == None: continue
+
+		# if the meta cant be downloaded then skip it
+		if meta == None:
+			# comment out appendArchive if you want to try and download the video again next time
+			appendArchive(videoURL)
+			continue
+
 		urlType = meta.get("_type") or "video"
 		# print("downloading", urlType, urlparse(videoURL).query)
 
@@ -134,6 +162,7 @@ def main():
 		title = "[{0}]_[{1}]".format(meta.get("id"), "%(title)s.%(ext)s")
 
 		# if the type is none then assume its a single video
+		print("downloading a", urlType)
 		if urlType == "playlist":
 			print("downloading playlist")
 			download_video(videoURL, directory, title)
@@ -157,7 +186,7 @@ if __name__ == '__main__':
 	main()
 
 	# release the lock
-	releaseDBLock()
+	# releaseDBLock()
 
 
 # ? Field response types
